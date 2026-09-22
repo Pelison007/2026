@@ -43,33 +43,38 @@ app.MapPost("/api/produto/cadastrar", (Produto? produto) =>
     {
         return Results.BadRequest("Produto não pode ser nulo!");
     }
-    bool nomeExiste = false;
 
     // Validar se o nome foi preenchido
-    if (string.IsNullOrWhiteSpace(produto.Nome))
+    if(produto.Nome == "")
     {
-        return Results.BadRequest("Nome do produto deve ser preenchido!");
+        return Results.BadRequest("O nome do produto não pode ser vazio!");
     }
 
     //Validar se existe um produto com o mesmo nome do produto
-    foreach (Produto p in produtos)
+    foreach (Produto produtoCadastrado in produtos)
     {
-        if (produto.Nome == p.Nome)
+        if (produtoCadastrado.Nome == produto.Nome)
         {
-            nomeExiste = true;
-            break;
+            return Results.BadRequest("Já existe um produto cadastrado com esse nome!");
+        }
+    }
+    produtos.Add(produto);
+    return Results.Created("", produto);
+});
+
+// 1 - Pesquisar produto por nome
+//GET: /api/produto/buscar/nome_produto
+app.MapGet("/api/produto/buscar/{nome}", (string nome) =>
+{
+    foreach (Produto produtoCadastrado in produtos)
+    {
+        if (produtoCadastrado.Nome == nome)
+        {
+            return Results.Ok("Produto encontrado!");
         }
     }
 
-    if (nomeExiste)
-    {
-        return Results.BadRequest("Já existe um produto com esse nome!");
-    }
-    else
-    {
-        produtos.Add(produto);
-        return Results.Created("", produto);   
-    }
+    return Results.NotFound("Produto não encontrado!");
 });
 
 app.Run();
