@@ -8,7 +8,7 @@ GET http://localhost:5195
 ### Listar Produtos
 GET http://localhost:5195/api/produto/listar
 
-### Buscar Produto
+### Buscar produto por nome
 GET http://localhost:5195/api/produto/buscar/Mouse
 
 ### Cadastrar Produto
@@ -17,4 +17,15 @@ Content-Type: application/json
 
 {
     "nome" : "Teclado"
+}
+
+### Remover produto por id
+DELETE http://localhost:5195/api/produto/remover/83b5d648-a755-4a6e-96ff-2226f80d15ef
+
+### Alterar Produto
+PUT http://localhost:5195/api/produto/alterar/77d6d4f1-286b-49ad-ab14-5a82f68e170d
+Content-Type: application/json
+
+{
+    "nome" : "Mouse"
 }

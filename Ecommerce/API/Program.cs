@@ -8,6 +8,8 @@
 //3 - Criar o projeto
 //4 - Vincular o projeto para a solução
 
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
@@ -62,19 +64,45 @@ app.MapPost("/api/produto/cadastrar", (Produto? produto) =>
     return Results.Created("", produto);
 });
 
-// 1 - Pesquisar produto por nome
 //GET: /api/produto/buscar/nome_produto
 app.MapGet("/api/produto/buscar/{nome}", (string nome) =>
 {
-    foreach (Produto produtoCadastrado in produtos)
+    //Expressão lambda
+    Produto? produtoEncontrado = produtos.FirstOrDefault(x => x.Nome == nome);
+    if (produtoEncontrado is null)
     {
-        if (produtoCadastrado.Nome == nome)
-        {
-            return Results.Ok("Produto encontrado!");
-        }
+        return Results.NotFound("Produto não encontrado!");
     }
+    return Results.Ok(produtoEncontrado);    
+});
 
-    return Results.NotFound("Produto não encontrado!");
+// 2 - Delete Produto
+//DELETE: /api/produto/remover/
+app.MapDelete("/api/produto/remover/{id}", (string id) =>
+{
+    //lambda
+    Produto? produtoEncontrado = produtos.FirstOrDefault(x => x.Id == id);
+    if (produtoEncontrado is null)
+    {
+        return Results.NotFound("Produto não Encontrado");
+    }
+    produtos.Remove(produtoEncontrado);
+    return Results.Ok(produtoEncontrado);
+});
+
+
+// 3 - Alterar Produto
+//Alterar: /api/produto/alterar/id_produto
+app.MapPut("/api/produto/alterar/{id}", ([FromRoute] string id, [FromBody] Produto produtoAlterado) =>
+{
+    //lambda
+    Produto? produtoEncontrado = produtos.FirstOrDefault(x => x.Id == id);
+    if (produtoEncontrado is null)
+    {
+        return Results.NotFound("Produto não Encontrado");
+    }
+    produtoEncontrado.Nome = produtoAlterado.Nome;
+    return Results.Ok(produtoEncontrado);
 });
 
 app.Run();
