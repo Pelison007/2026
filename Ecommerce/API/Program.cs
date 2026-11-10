@@ -13,6 +13,19 @@ using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuração do CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AcessoTotal", policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+
 //Registrar o serviço de banco de dados
 builder.Services.AddDbContext<AppDataContext>();
 
@@ -121,5 +134,5 @@ app.MapPut("/api/produto/alterar/{id}",
     return Results.Ok(produtoEncontrado);    
 });
 
-
+app.UseCors("AcessoTotal");
 app.Run();
