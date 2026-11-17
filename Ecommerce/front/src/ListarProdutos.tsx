@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
+import { Produto } from "./models/Produto";
 
 function ListarProdutos() {
-
   //Estados / Variavéis
-  //const[localidade, setLocalidade] = useState("");
-  //const[logradouro, setLogradouro] = useState("");
-  const[produtos, setProdutos] = useState([]);
+  const[produtos, setProdutos] = useState<Produto[]>([]);
 
   //useEffect é utilizado para executar qualquer código
   //no momento em que o componente estiver sendo aberto
@@ -36,14 +34,26 @@ function ListarProdutos() {
   return (
     <div>
       <h1>Lista de Produtos</h1>
-      <ul>
-        {produtos.map((produto : any) => (
-          <li>
-            {produto.id}
-          </li>
-        ))
-        }
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>Valor</th>
+            <th>Criado Em</th>
+          </tr>
+        </thead>
+        <tbody>
+          {produtos.map(produto => (
+            <tr key={produto.id}>
+              <td>{produto.id}</td>
+              <td>{produto.nome}</td>
+              <td>{produto.valor}</td>
+              <td>{produto.criadoEm}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table> 
     </div>
   );
 }

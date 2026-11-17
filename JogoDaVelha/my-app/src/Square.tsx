@@ -3,7 +3,18 @@ type SquareProps = {
 };
 
 function Square({ value }: SquareProps) {
-  return <button className="square">{value}</button>;
+    function handleClick(){
+        console.log('clickled!');
+    }
+
+  return (
+    <button 
+        className="square"
+        onClick ={handleClick}
+    >
+            {value}
+    </button>
+  );
 }
 
 export default Square;
